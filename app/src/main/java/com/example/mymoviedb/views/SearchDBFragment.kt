@@ -5,14 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mymoviedb.R
+import com.example.mymoviedb.adapters.MovieAdapter
+import com.example.mymoviedb.models.Movie
 import com.example.mymoviedb.models.MovieBrief
 import com.example.mymoviedb.presenters.MovieQuery
 import com.example.mymoviedb.presenters.MovieQueryView
-import com.example.mymoviedb.utils.Logger
+import com.example.mymoviedb.viewmodels.MoviePageViewModel
 import kotlinx.android.synthetic.main.fragment_search_database.*
+import java.lang.Exception
 
-class SearchDBFragment : Fragment(), MovieQueryView {
+class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector {
+
+    val model: MoviePageViewModel by lazy {
+        activity?.run {
+            ViewModelProvider(
+                this,
+                ViewModelProvider.NewInstanceFactory()
+            ).get(MoviePageViewModel::class.java)
+        } ?: throw Exception("Illegal Activity")
+    }
 
     private val movieQuery = MovieQuery(this)
 
@@ -36,12 +50,30 @@ class SearchDBFragment : Fragment(), MovieQueryView {
     }
 
     override fun displayQueryResults(movies: List<MovieBrief>) {
-        movies.forEach {
-            Logger.log("Result: ${it.title}")
-        }
+        rv_results_list.adapter = MovieAdapter(movies, this)
+        rv_results_list.layoutManager = LinearLayoutManager(this.context)
     }
 
     override fun displayQueryError() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun displayGetMovieError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun movieSelected(movie: MovieBrief) {
+        movieQuery.getMovie(movie.id)
+    }
+
+    override fun displayMovie(movie: Movie) {
+        model.selectMovie(movie)
+
+        val frag = MoviePageFragment()
+        fragmentManager?.beginTransaction()?.apply {
+            add(R.id.movie_page_container, frag)
+            commit()
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 package com.example.mymoviedb.presenters
 
 import com.example.mymoviedb.api.TMDbService
+import com.example.mymoviedb.models.Movie
 import com.example.mymoviedb.models.MovieBrief
 import com.example.mymoviedb.models.MovieQueryResponse
 import com.example.mymoviedb.utils.Logger
@@ -11,10 +12,13 @@ import retrofit2.Response
 interface MovieQueryView {
     fun displayQueryResults(movies: List<MovieBrief>)
     fun displayQueryError()
+    fun displayGetMovieError()
+    fun displayMovie(movie: Movie)
 }
 
 interface MovieQueryRepo {
     fun queryMovies(query: String)
+    fun getMovie(id: Int)
 }
 
 class MovieQuery(private val view: MovieQueryView) : MovieQueryRepo {
@@ -37,5 +41,23 @@ class MovieQuery(private val view: MovieQueryView) : MovieQueryRepo {
             }
         })
 
+    }
+
+    override fun getMovie(id: Int) {
+        tmdbService.getMovie(id).enqueue(object : Callback<Movie> {
+            override fun onFailure(call: Call<Movie>, t: Throwable) {
+                Logger.e("error fetching movie $id: ${t.message}")
+                view.displayGetMovieError()
+            }
+
+            override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
+                val movie: Movie? = response.body()
+                if (movie != null) view.displayMovie(movie)
+                else {
+                    Logger.e("response body was null")
+                    view.displayGetMovieError()
+                }
+            }
+        })
     }
 }

@@ -2,9 +2,19 @@ package com.example.mymoviedb.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import com.example.mymoviedb.R
+import com.example.mymoviedb.adapters.MovieAdapter
+import com.example.mymoviedb.viewmodels.MoviePageViewModel
 
 class MainActivity : AppCompatActivity() {
+
+    val model: MoviePageViewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(MoviePageViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

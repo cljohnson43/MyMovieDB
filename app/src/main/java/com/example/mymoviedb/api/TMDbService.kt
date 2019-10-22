@@ -1,6 +1,7 @@
 package com.example.mymoviedb.api
 
 import com.example.mymoviedb.BuildConfig
+import com.example.mymoviedb.models.Movie
 import com.example.mymoviedb.models.MovieQueryResponse
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -20,5 +21,9 @@ class TMDbService {
 
     fun movieQuery(query: String): Call<MovieQueryResponse> {
         return tmdbService.gueryMovies(BuildConfig.MOVIE_DB_KEY, query)
+    }
+
+    fun getMovie(id: Int): Call<Movie> {
+        return tmdbService.getMovie(id, BuildConfig.MOVIE_DB_KEY)
     }
 }
