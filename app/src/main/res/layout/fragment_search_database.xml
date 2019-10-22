@@ -12,7 +12,7 @@
         android:layout_marginTop="@dimen/double_spacing"
         android:layout_marginLeft="@dimen/double_spacing"
         android:layout_marginRight="@dimen/double_spacing"
-        android:layout_marginBottom="@dimen/double_spacing"
+        android:layout_marginBottom="@dimen/spacing"
         android:padding="@dimen/spacing"
         android:hint="@string/enter_movie_title"
         app:layout_constraintStart_toStartOf="parent"
