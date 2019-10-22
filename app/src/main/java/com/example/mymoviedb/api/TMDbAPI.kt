@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TMDbAPI {
-    @GET("/search/movie")
+    @GET("search/movie")
     fun gueryMovies(@Query("api_key") apiKey: String, @Query("query") query: String): Call<MovieQueryResponse>
 }
