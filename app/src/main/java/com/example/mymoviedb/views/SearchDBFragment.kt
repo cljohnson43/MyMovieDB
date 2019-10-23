@@ -22,18 +22,18 @@ import java.lang.Exception
 class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector {
 
     val model: MoviePageViewModel by lazy {
-        activity?.run {
+        requireActivity().run {
             ViewModelProvider(
                 this,
                 ViewModelProvider.NewInstanceFactory()
             ).get(MoviePageViewModel::class.java)
-        } ?: throw Exception("Illegal Activity")
+        }
     }
 
     private val movieQuery: MovieQuery by lazy {
-        activity?.run {
+        requireActivity().run {
             MovieQuery(this@SearchDBFragment, this.cacheDir)
-        } ?: throw Exception("Illegal Activity")
+        }
     }
 
     override fun onCreateView(
@@ -57,7 +57,6 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
 
     override fun displayQueryResults(movies: List<MovieBrief>) {
         rv_results_list.adapter = MovieAdapter(movies, this)
-        rv_results_list.layoutManager = LinearLayoutManager(this.context)
     }
 
     override fun displayQueryError() {

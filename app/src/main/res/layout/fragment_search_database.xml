@@ -51,6 +51,7 @@
         android:layout_height="0dp"
         android:layout_marginRight="@dimen/double_spacing"
         android:layout_marginLeft="@dimen/double_spacing"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
