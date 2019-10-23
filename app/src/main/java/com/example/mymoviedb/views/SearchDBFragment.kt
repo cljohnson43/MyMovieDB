@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mymoviedb.R
 import com.example.mymoviedb.adapters.MovieAdapter
@@ -69,11 +70,7 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
     override fun displayMovie(movie: Movie) {
         model.selectMovie(movie)
 
-        val frag = MoviePageFragment()
-        fragmentManager?.beginTransaction()?.apply {
-            add(R.id.movie_page_container, frag)
-            commit()
-        }
-
+        val directions = SearchDBFragmentDirections.actionSearchDBFragmentToMoviePageFragment()
+        findNavController().navigate(directions)
     }
 }

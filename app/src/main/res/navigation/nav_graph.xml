@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/searchDBFragment">
+
+    <fragment
+        android:id="@+id/moviePageFragment"
+        android:name="com.example.mymoviedb.views.MoviePageFragment"
+        android:label="MoviePageFragment" />
+
+    <fragment
+        android:id="@+id/searchDBFragment"
+        android:name="com.example.mymoviedb.views.SearchDBFragment"
+        android:label="SearchDBFragment">
+        <action
+            android:id="@+id/action_searchDBFragment_to_moviePageFragment"
+            app:destination="@id/moviePageFragment" />
+    </fragment>
+
+</navigation>
