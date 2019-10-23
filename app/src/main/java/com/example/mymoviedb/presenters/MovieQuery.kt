@@ -5,13 +5,14 @@ import com.example.mymoviedb.models.Movie
 import com.example.mymoviedb.models.MovieBrief
 import com.example.mymoviedb.models.MovieQueryResponse
 import com.example.mymoviedb.utils.Logger
+import com.example.mymoviedb.viewmodels.MoviePageViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
 interface MovieQueryView {
-    fun displayQueryResults(movies: List<MovieBrief>)
+    fun displayQueryResults()
     fun displayQueryError()
     fun displayGetMovieError()
     fun displayMovie(movie: Movie)
@@ -22,7 +23,11 @@ interface MovieQueryRepo {
     fun getMovie(id: Int)
 }
 
-class MovieQuery(private val view: MovieQueryView, cacheDir: File) : MovieQueryRepo {
+class MovieQuery(
+    private val view: MovieQueryView,
+    cacheDir: File,
+    private val viewModel: MoviePageViewModel
+) : MovieQueryRepo {
 
     private val tmdbClient = TMDbClient(cacheDir)
 
@@ -39,7 +44,10 @@ class MovieQuery(private val view: MovieQueryView, cacheDir: File) : MovieQueryR
             ) {
                 val results = response.body()?.movieBriefs?.map { movie -> movie!! }
                     ?: listOf<MovieBrief>()
-                view.displayQueryResults(results)
+
+                viewModel.storeQueryResults(results)
+
+                view.displayQueryResults()
             }
         })
 

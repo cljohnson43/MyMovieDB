@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mymoviedb.R
 import com.example.mymoviedb.adapters.MovieAdapter
 import com.example.mymoviedb.models.Movie
@@ -17,7 +16,6 @@ import com.example.mymoviedb.presenters.MovieQuery
 import com.example.mymoviedb.presenters.MovieQueryView
 import com.example.mymoviedb.viewmodels.MoviePageViewModel
 import kotlinx.android.synthetic.main.fragment_search_database.*
-import java.lang.Exception
 
 class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector {
 
@@ -32,7 +30,7 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
 
     private val movieQuery: MovieQuery by lazy {
         requireActivity().run {
-            MovieQuery(this@SearchDBFragment, this.cacheDir)
+            MovieQuery(this@SearchDBFragment, this.cacheDir, model)
         }
     }
 
@@ -48,6 +46,8 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
         super.onActivityCreated(savedInstanceState)
 
         btn_search_db.setOnClickListener { submit() }
+
+        displayQueryResults()
     }
 
     fun submit() {
@@ -55,8 +55,10 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
         movieQuery.queryMovies(query)
     }
 
-    override fun displayQueryResults(movies: List<MovieBrief>) {
-        rv_results_list.adapter = MovieAdapter(movies, this)
+    override fun displayQueryResults() {
+        model.queryResults?.let {
+            rv_results_list.adapter = MovieAdapter(it, this)
+        }
     }
 
     override fun displayQueryError() {
