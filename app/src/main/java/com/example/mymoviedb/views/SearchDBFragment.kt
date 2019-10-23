@@ -29,7 +29,11 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
         } ?: throw Exception("Illegal Activity")
     }
 
-    private val movieQuery = MovieQuery(this)
+    private val movieQuery: MovieQuery by lazy {
+        activity?.run {
+            MovieQuery(this@SearchDBFragment, this.cacheDir)
+        } ?: throw Exception("Illegal Activity")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,10 +46,10 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btn_search_db.setOnClickListener { view -> submit(view) }
+        btn_search_db.setOnClickListener { submit() }
     }
 
-    fun submit(view: View) {
+    fun submit() {
         val query = et_search_input.text.toString()
         movieQuery.queryMovies(query)
     }

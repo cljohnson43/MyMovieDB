@@ -1,6 +1,6 @@
 package com.example.mymoviedb.presenters
 
-import com.example.mymoviedb.api.TMDbService
+import com.example.mymoviedb.api.TMDbClient
 import com.example.mymoviedb.models.Movie
 import com.example.mymoviedb.models.MovieBrief
 import com.example.mymoviedb.models.MovieQueryResponse
@@ -8,6 +8,7 @@ import com.example.mymoviedb.utils.Logger
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 interface MovieQueryView {
     fun displayQueryResults(movies: List<MovieBrief>)
@@ -21,11 +22,12 @@ interface MovieQueryRepo {
     fun getMovie(id: Int)
 }
 
-class MovieQuery(private val view: MovieQueryView) : MovieQueryRepo {
-    private val tmdbService = TMDbService()
+class MovieQuery(private val view: MovieQueryView, cacheDir: File) : MovieQueryRepo {
+
+    private val tmdbClient = TMDbClient(cacheDir)
 
     override fun queryMovies(query: String) {
-        tmdbService.movieQuery(query).enqueue(object : Callback<MovieQueryResponse> {
+        tmdbClient.movieQuery(query).enqueue(object : Callback<MovieQueryResponse> {
             override fun onFailure(call: Call<MovieQueryResponse>, t: Throwable) {
                 Logger.e("error fetching movie query: ${t.message}")
                 view.displayQueryError()
@@ -44,7 +46,7 @@ class MovieQuery(private val view: MovieQueryView) : MovieQueryRepo {
     }
 
     override fun getMovie(id: Int) {
-        tmdbService.getMovie(id).enqueue(object : Callback<Movie> {
+        tmdbClient.getMovie(id).enqueue(object : Callback<Movie> {
             override fun onFailure(call: Call<Movie>, t: Throwable) {
                 Logger.e("error fetching movie $id: ${t.message}")
                 view.displayGetMovieError()
