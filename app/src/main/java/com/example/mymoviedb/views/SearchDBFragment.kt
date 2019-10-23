@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -60,11 +61,19 @@ class SearchDBFragment : Fragment(), MovieQueryView, MovieAdapter.MovieSelector 
     }
 
     override fun displayQueryError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(
+            this.context,
+            "There was a problem retrieving results for your query. Try a different query",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun displayGetMovieError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(
+            this.context,
+            "There was a problem getting info for your movie selection. Try again at a later time.",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun movieSelected(movie: MovieBrief) {
